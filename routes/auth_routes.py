@@ -16,6 +16,8 @@ auth_bp = Blueprint("auth", __name__)
 def login():
     if request.args.get("confirmed") == "1":
         flash("Usuario confirmado correctamente. Ya podes iniciar sesion.", "success")
+    if request.args.get("password_reset") == "1":
+        flash("Contrasena actualizada correctamente. Ya podes iniciar sesion.", "success")
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
