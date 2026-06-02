@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Mi puntaje</h1>
+        <p class="text-muted mb-0">
+            Detalle de tus predicciones y puntos obtenidos en partidos finalizados.
+        </p>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Puntos</div>
+                <div class="fs-4 fw-bold">{{ summary.total_points }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Exactos</div>
+                <div class="fs-4 fw-bold">{{ summary.exact_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Gan./Emp.</div>
+                <div class="fs-4 fw-bold">{{ summary.result_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Fallados</div>
+                <div class="fs-4 fw-bold">{{ summary.miss_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Pendientes</div>
+                <div class="fs-4 fw-bold">{{ summary.pending_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <div class="text-muted small">Total</div>
+                <div class="fs-4 fw-bold">{{ summary.total_predictions }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if grouped_predictions %}
+    {% for day_label, predictions in grouped_predictions.items() %}
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <strong>{{ day_label }}</strong>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 90px;">Hora</th>
+                            <th>Partido</th>
+                            <th style="width: 140px;">Pronóstico</th>
+                            <th style="width: 140px;">Resultado</th>
+                            <th style="width: 150px;">Estado</th>
+                            <th style="width: 90px;">Puntos</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for prediction in predictions %}
+                            {% set match = prediction.match %}
+
+                            <tr>
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ prediction.match_time_arg }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="match-teams-inline">
+                                        <div class="team-inline">
+                                            {% if match.home_team.url_flag %}
+                                                <img
+                                                    src="{{ match.home_team.url_flag }}"
+                                                    alt="{{ match.home_team.name }}"
+                                                    class="team-flag"
+                                                    loading="lazy"
+                                                >
+                                            {% endif %}
+                                            <strong>{{ match.home_team.name }}</strong>
+                                        </div>
+
+                                        <span class="text-muted mx-2">vs</span>
+
+                                        <div class="team-inline">
+                                            {% if match.away_team.url_flag %}
+                                                <img
+                                                    src="{{ match.away_team.url_flag }}"
+                                                    alt="{{ match.away_team.name }}"
+                                                    class="team-flag"
+                                                    loading="lazy"
+                                                >
+                                            {% endif %}
+                                            <strong>{{ match.away_team.name }}</strong>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary">
+                                        {{ prediction.home_score }} - {{ prediction.away_score }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {% if match.is_finished %}
+                                        <span class="badge bg-success">
+                                            {{ match.home_score }} - {{ match.away_score }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">
+                                            Pendiente
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <span class="badge {{ prediction.result_badge_class }}">
+                                        {{ prediction.result_label_text }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {% if match.is_finished %}
+                                        <strong>{{ prediction.points }}</strong>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        Todavía no cargaste pronósticos.
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,220 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.table {
+    background-color: white;
+}
+
+.score-input {
+    width: 70px;
+}
+
+.card-header {
+    font-size: 1.05rem;
+}
+
+.match-teams-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.team-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.team-flag {
+    width: 28px;
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.card-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+/* DESKTOP version */
+
+.desktop-match-score-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) auto minmax(160px, 1fr);
+    align-items: center;
+    gap: 16px;
+}
+
+.desktop-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.desktop-team-home {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.desktop-team-away {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.desktop-score-box-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.desktop-score-input {
+    width: 62px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.desktop-score-separator {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* MOBILE version */
+
+.desktop-score-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-match-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.mobile-pending {
+    border-color: #f0c24b;
+}
+
+.mobile-missing-closed {
+    border-color: #dc3545;
+}
+
+.mobile-match-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.mobile-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.mobile-team-left {
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.mobile-team-right {
+    justify-content: flex-start;
+    flex: 1;
+}
+
+.mobile-team-code {
+    min-width: 42px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.mobile-flag {
+    width: 34px;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.mobile-score-center {
+    flex: 0 0 auto;
+}
+
+.mobile-score-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-score-input {
+    width: 56px;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 8px 6px;
+}
+
+.mobile-score-sep {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.mobile-match-meta {
+    text-align: center;
+    color: #6c757d;
+    margin-top: 12px;
+    font-size: 1rem;
+}
+
+.mobile-badges {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.mobile-saved-text {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 0.92rem;
+}
+
+
+/* Ver pronósticos jugadores */
+
+.match-detail-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+}
+
+.match-detail-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+}
+
+.match-detail-score {
+    text-align: center;
+}
+
+@media (max-width: 767.98px) {
+    .match-detail-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .match-detail-team {
+        justify-content: center !important;
+    }
+}

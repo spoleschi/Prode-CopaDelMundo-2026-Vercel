@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Carga de resultados</h1>
+        <p class="text-muted mb-0">
+            Panel administrador. Los horarios se muestran en hora Argentina.
+        </p>
+    </div>
+</div>
+
+{% if grouped_matches %}
+    {% for day_label, matches in grouped_matches.items() %}
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <strong>{{ day_label }}</strong>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 90px;">Hora</th>
+                            <th style="width: 200px;">Partido</th>
+                            <th style="width: 150px;">Resultado actual</th>
+                            <th style="width: 260px;">Cargar resultado</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for match in matches %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ match.match_time_arg }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <strong>{{ match.home_team.name }}</strong>
+                                    <span class="text-muted">vs</span>
+                                    <strong>{{ match.away_team.name }}</strong>
+
+                                    <div>
+                                        <small class="text-muted">
+                                            Partido ID: {{ match.id }}
+                                        </small>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {% if match.is_finished %}
+                                        <span class="badge bg-success">
+                                            {{ match.home_score }} - {{ match.away_score }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">
+                                            Pendiente
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                                        <form method="post" class="d-flex align-items-center gap-2">
+                                            <input type="hidden" name="match_id" value="{{ match.id }}">
+
+                                            <input
+                                                name="home_score"
+                                                type="number"
+                                                min="0"
+                                                class="form-control form-control-sm score-input"
+                                                placeholder="Local"
+                                                value="{{ match.home_score if match.home_score is not none else '' }}"
+                                                {% if not match.can_load_result %}disabled{% endif %}
+                                                required
+                                            >
+
+                                            <span>-</span>
+
+                                            <input
+                                                name="away_score"
+                                                type="number"
+                                                min="0"
+                                                class="form-control form-control-sm score-input"
+                                                placeholder="Visitante"
+                                                value="{{ match.away_score if match.away_score is not none else '' }}"
+                                                {% if not match.can_load_result %}disabled{% endif %}
+                                                required
+                                            >
+
+                                            {% if match.is_finished %}
+                                                <button class="btn btn-sm btn-warning" {% if not match.can_load_result %}disabled{% endif %}>
+                                                    Actualizar
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-primary" {% if not match.can_load_result %}disabled{% endif %}>
+                                                    Guardar
+                                                </button>
+                                            {% endif %}
+                                        </form>
+
+                                        {% if not match.can_load_result %}
+                                            <span class="text-muted small">
+                                                {{ match.load_result_reason }}
+                                            </span>
+                                        {% endif %}
+
+                                        {% if match.is_finished %}
+                                            <form
+                                                method="post"
+                                                action="{{ url_for('admin.limpiar_resultado') }}"
+                                                onsubmit="return confirm('¿Seguro que querés limpiar el resultado de este partido? También se reiniciarán los puntos asociados.');"
+                                            >
+                                                <input type="hidden" name="match_id" value="{{ match.id }}">
+
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    Limpiar
+                                                </button>
+                                            </form>
+                                        {% endif %}
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        Todavía no hay partidos cargados.
+    </div>
+{% endif %}
+
+{% endblock %}

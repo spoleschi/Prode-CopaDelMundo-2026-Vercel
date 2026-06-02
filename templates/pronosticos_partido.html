@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <h1 class="mb-2">Pronósticos del partido</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="match-detail-header">
+                <div class="match-detail-team justify-content-end">
+                    {% if match.home_team.url_flag %}
+                        <img
+                            src="{{ match.home_team.url_flag }}"
+                            alt="{{ match.home_team.name }}"
+                            class="team-flag"
+                            loading="lazy"
+                        >
+                    {% endif %}
+                    <strong>{{ match.home_team.name }}</strong>
+                </div>
+
+                <div class="match-detail-score">
+                    {% if match.is_finished %}
+                        <span class="badge bg-success fs-5">
+                            {{ match.home_score }} - {{ match.away_score }}
+                        </span>
+                    {% else %}
+                        <span class="text-muted fs-5">vs</span>
+                    {% endif %}
+                </div>
+
+                <div class="match-detail-team justify-content-start">
+                    {% if match.away_team.url_flag %}
+                        <img
+                            src="{{ match.away_team.url_flag }}"
+                            alt="{{ match.away_team.name }}"
+                            class="team-flag"
+                            loading="lazy"
+                        >
+                    {% endif %}
+                    <strong>{{ match.away_team.name }}</strong>
+                </div>
+            </div>
+
+            <div class="text-center text-muted mt-3">
+                {{ match.match_day_label }} · {{ match.match_time_arg }} hs
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-8">
+            <label class="form-label">Ver pronósticos</label>
+            <select name="group_id" class="form-select">
+                <option value="">Global - todos los usuarios</option>
+
+                {% for item in user_groups %}
+                    <option
+                        value="{{ item.group.id }}"
+                        {% if selected_group_id == item.group.id %}selected{% endif %}
+                    >
+                        {{ item.group.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn btn-primary w-100">
+                Aplicar
+            </button>
+        </div>
+    </div>
+</form>
+
+{% if predictions %}
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Apostador</th>
+                        <th style="width: 160px;">Pronóstico</th>
+                        <th style="width: 100px;">Puntos</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for prediction in predictions %}
+                        {% set profile = prediction.profile %}
+
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{ profile.display_name if profile and profile.display_name else profile.email }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-primary fs-6">
+                                    {{ prediction.home_score }} - {{ prediction.away_score }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if match.is_finished %}
+                                    <span class="badge bg-success fs-6">
+                                        {{ prediction.points }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Todavía no hay pronósticos cargados para este partido.
+    </div>
+{% endif %}
+
+<div class="mt-4 text-end">
+    <a href="{{ url_for('main.fixture') }}" class="btn btn-sm btn-outline-secondary mb-3">
+        Volver al fixture
+    </a>
+</div>
+{% endblock %}

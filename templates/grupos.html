@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="mb-1">Mis grupos</h1>
+    <p class="text-muted mb-0">
+        Podés crear grupos privados o sumarte a grupos existentes.
+    </p>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                Crear grupo
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{{ url_for('group.crear') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del grupo</label>
+                        <input
+                            name="name"
+                            type="text"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña del grupo</label>
+                        <input
+                            name="password"
+                            type="password"
+                            class="form-control"
+                            minlength="4"
+                            required
+                        >
+                        <div class="form-text">
+                            Compartila solo con quienes quieras invitar.
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary">
+                        Crear grupo
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                Unirme a grupo
+            </div>
+
+            <div class="card-body">
+                <form method="post" action="{{ url_for('group.unirse') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del grupo</label>
+                        <input
+                            name="name"
+                            type="text"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input
+                            name="password"
+                            type="password"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <button class="btn btn-success">
+                        Unirme
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-dark text-white">
+        Grupos a los que pertenezco
+    </div>
+
+    <div class="card-body">
+        {% if groups %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Grupo</th>
+                            <th style="width: 180px;">Ingreso</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in groups %}
+                            <tr>
+                                <td>
+                                    <strong>{{ item.group.name }}</strong>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ item.joined_at }}
+                                    </small>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-0">
+                Todavía no pertenecés a ningún grupo.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
