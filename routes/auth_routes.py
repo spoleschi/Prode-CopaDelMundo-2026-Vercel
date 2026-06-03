@@ -15,9 +15,9 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.args.get("confirmed") == "1":
-        flash("Usuario confirmado correctamente. Ya podes iniciar sesion.", "success")
+        flash("Usuario confirmado correctamente. Ya podés iniciar sesión.", "success")
     if request.args.get("password_reset") == "1":
-        flash("Contrasena actualizada correctamente. Ya podes iniciar sesion.", "success")
+        flash("Contraseña actualizada correctamente. Ya podés iniciar sesión.", "success")
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
@@ -28,7 +28,7 @@ def login():
             user = response.user
 
             if not user:
-                flash("No se pudo iniciar sesion.", "danger")
+                flash("No se pudo iniciar sesión.", "danger")
                 return redirect(url_for("auth.login"))
 
             profile = ensure_profile(user_id=user.id, email=user.email)
@@ -38,11 +38,11 @@ def login():
             session["display_name"] = profile.get("display_name") if profile else user.email
             session["is_admin"] = profile.get("is_admin", False) if profile else False
 
-            flash("Sesion iniciada correctamente.", "success")
+            flash("Sesión iniciada correctamente.", "success")
             return redirect(url_for("main.fixture"))
 
         except Exception:
-            flash("Email o contrasena incorrectos.", "danger")
+            flash("Email o contraseña incorrectos.", "danger")
 
     return render_template("login.html")
 
@@ -61,7 +61,7 @@ def register():
             if user:
                 ensure_profile(user_id=user.id, email=user.email, display_name=display_name)
 
-            flash("Usuario registrado correctamente. Ya podes iniciar sesion.", "success")
+            flash("Usuario registrado correctamente. Ya podés iniciar sesión.", "success")
             return redirect(url_for("auth.login"))
 
         except Exception:
@@ -76,16 +76,16 @@ def reset_password_request():
         email = request.form.get("email", "").strip().lower()
 
         if not email:
-            flash("Ingresa tu email.", "warning")
+            flash("Ingresá tu email.", "warning")
             return redirect(url_for("auth.reset_password_request"))
 
         try:
             request_password_reset(email)
-            flash("Si el email existe, recibiras un enlace para recuperar tu contrasena.", "success")
+            flash("Si el email existe, recibirás un enlace para recuperar tu contraseña.", "success")
             return redirect(url_for("auth.login"))
 
         except Exception:
-            flash("No se pudo solicitar la recuperacion de contrasena.", "danger")
+            flash("No se pudo solicitar la recuperación de contraseña.", "danger")
 
     return render_template("reset_password.html")
 
@@ -102,5 +102,5 @@ def reset_password_confirm():
 @auth_bp.route("/logout")
 def logout():
     session.clear()
-    flash("Sesion cerrada.", "info")
+    flash("Sesión cerrada.", "info")
     return redirect(url_for("auth.login"))

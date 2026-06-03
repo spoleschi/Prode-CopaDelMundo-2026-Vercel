@@ -17,7 +17,7 @@ def login_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
         if "user_id" not in session:
-            flash("Tenes que iniciar sesion.", "warning")
+            flash("Tenés que iniciar sesión.", "warning")
             return redirect(url_for("auth.login"))
         return view(*args, **kwargs)
 
@@ -28,10 +28,10 @@ def admin_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
         if "user_id" not in session:
-            flash("Tenes que iniciar sesion.", "warning")
+            flash("Tenes que iniciar sesión.", "warning")
             return redirect(url_for("auth.login"))
         if session.get("is_admin") is not True:
-            flash("No tenes permisos de administrador.", "danger")
+            flash("No tenés permisos de administrador.", "danger")
             return redirect(url_for("main.fixture"))
         return view(*args, **kwargs)
 
