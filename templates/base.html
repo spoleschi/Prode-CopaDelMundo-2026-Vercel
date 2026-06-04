@@ -46,6 +46,9 @@
                     <a class="nav-link" href="{{ url_for('group.index') }}">
                         Grupos
                     </a>
+                    <a class="nav-link" href="{{ url_for('main.reglamento') }}">
+                        Reglamento
+                    </a>
 
                     {% if session.get("is_admin") %}
                         <a class="nav-link" href="{{ url_for('admin.resultados') }}">

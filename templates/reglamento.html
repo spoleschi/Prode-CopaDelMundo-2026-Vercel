@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="mb-1">Reglamento</h1>
+    <p class="text-muted mb-0">
+        Reglas generales de participación, carga de pronósticos y cálculo de puntajes.
+    </p>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        1. Participación
+    </div>
+
+    <div class="card-body">
+        <p>
+            Para participar, cada usuario debe registrarse con un email y cargar sus pronósticos
+            para los partidos del fixture.
+        </p>
+
+        <p class="mb-0">
+            Cada usuario puede cargar un único pronóstico por partido. Si vuelve a guardar un
+            pronóstico antes del cierre del partido, el pronóstico anterior será reemplazado.
+        </p>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        2. Carga de pronósticos
+    </div>
+
+    <div class="card-body">
+        <p>
+            Los pronósticos se cargan desde la pantalla <strong>Fixture</strong>.
+            Los partidos están agrupados por día para facilitar la carga.
+        </p>
+
+        <p>
+            Para cada partido se debe indicar la cantidad de goles del equipo local y del equipo visitante.
+            Luego se debe presionar el botón <strong>Guardar pronósticos del día</strong>.
+        </p>
+
+        <div class="alert alert-warning mb-0">
+            Si se carga solamente uno de los dos resultados de un partido, el sistema no guardará
+            ese pronóstico y mostrará un aviso de error. Para guardar un pronóstico deben completarse
+            ambos goles.
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        3. Cierre de pronósticos
+    </div>
+
+    <div class="card-body">
+        <p>
+            Los pronósticos de cada partido pueden cargarse o modificarse hasta el horario de inicio
+            del partido.
+        </p>
+
+        <p>
+            Una vez iniciado el partido, el pronóstico queda cerrado y ya no puede modificarse.
+        </p>
+
+        <div class="alert alert-info mb-0">
+            Los horarios del fixture se muestran en hora Argentina.
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        4. Cálculo de puntajes
+    </div>
+
+    <div class="card-body">
+        <p>
+            El puntaje se calcula cuando el administrador carga el resultado final de un partido.
+        </p>
+
+        <table class="table table-bordered align-middle mb-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Resultado del pronóstico</th>
+                    <th style="width: 140px;">Puntos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Resultado exacto</td>
+                    <td><strong>3 puntos</strong></td>
+                </tr>
+                <tr>
+                    <td>Acierta ganador o empate, pero no el resultado exacto</td>
+                    <td><strong>1 punto</strong></td>
+                </tr>
+                <tr>
+                    <td>No acierta ganador ni empate</td>
+                    <td><strong>0 puntos</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="mb-0">
+            Ejemplo: si el resultado real es <strong>Argentina 2 - 1 Argelia</strong>,
+            un pronóstico <strong>2 - 1</strong> suma 3 puntos; un pronóstico
+            <strong>1 - 0</strong> suma 1 punto; y un pronóstico <strong>1 - 1</strong>
+            suma 0 puntos.
+        </p>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        5. Ranking
+    </div>
+
+    <div class="card-body">
+        <p>
+            La tabla de posiciones se puede consultar desde la pantalla <strong>Ranking</strong>.
+        </p>
+
+        <p>
+            El ranking muestra los puntos acumulados, la cantidad de resultados exactos,
+            la cantidad de aciertos por ganador/empate y la cantidad de partidos computados.
+        </p>
+
+        <p class="mb-0">
+            Solo se computan partidos finalizados. Los partidos pendientes no suman puntos hasta
+            que el administrador cargue el resultado.
+        </p>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        6. Grupos
+    </div>
+
+    <div class="card-body">
+        <p>
+            Los usuarios pueden crear grupos privados o unirse a grupos existentes desde la pantalla
+            <strong>Grupos</strong>.
+        </p>
+
+        <p>
+            Cada grupo tiene un nombre y una contraseña. Para sumarse a un grupo existente se debe
+            conocer el nombre exacto del grupo y su contraseña.
+        </p>
+
+        <p>
+            Un usuario puede pertenecer a varios grupos al mismo tiempo.
+        </p>
+
+        <p class="mb-0">
+            En el ranking se puede elegir entre ver la tabla global, con todos los usuarios, o ver
+            solamente la tabla correspondiente a uno de los grupos a los que pertenece el usuario.
+        </p>
+    </div>
+</div>
+
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+        7. Pronósticos de otros usuarios
+    </div>
+
+    <div class="card-body">
+        <p>
+            Los pronósticos de otros usuarios para un partido estarán disponibles una vez que el
+            partido haya comenzado.
+        </p>
+
+        <p>
+            Antes del inicio del partido, cada usuario solo puede ver y modificar su propio pronóstico.
+        </p>
+
+        <p class="mb-0">
+            Desde el fixture, cuando un partido ya comenzó o finalizó, se habilita la opción para ver
+            los pronósticos cargados por otros usuarios. También se puede filtrar por grupo.
+        </p>
+    </div>
+</div>
+
+{% endblock %}
