@@ -283,12 +283,16 @@ html[data-theme="light"] .theme-toggle-icon {
 }
 
 .table-warning {
+    --bs-table-color: var(--page-text);
+    --bs-table-striped-color: var(--page-text);
     --bs-table-bg: rgba(232, 181, 65, 0.18);
     --bs-table-striped-bg: rgba(232, 181, 65, 0.24);
     --bs-table-hover-bg: rgba(232, 181, 65, 0.3);
 }
 
 .table-danger {
+    --bs-table-color: var(--page-text);
+    --bs-table-striped-color: var(--page-text);
     --bs-table-bg: rgba(216, 75, 90, 0.15);
     --bs-table-striped-bg: rgba(216, 75, 90, 0.2);
     --bs-table-hover-bg: rgba(216, 75, 90, 0.26);
