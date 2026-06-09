@@ -65,7 +65,7 @@ def fixture():
             summary["finished_matches"] += 1
             match["prediction_status"] = "FINISHED"
             match["prediction_status_text"] = "Finalizado"
-            match["prediction_status_badge"] = "bg-success"
+            match["prediction_status_badge"] = "bg-primary"
         elif not match["can_predict"]:
             summary["closed_matches"] += 1
             if has_prediction:
@@ -81,7 +81,7 @@ def fixture():
                 summary["loaded_predictions"] += 1
                 match["prediction_status"] = "LOADED"
                 match["prediction_status_text"] = "Cargado"
-                match["prediction_status_badge"] = "bg-primary"
+                match["prediction_status_badge"] = "bg-success"
             else:
                 summary["pending_predictions"] += 1
                 match["prediction_status"] = "PENDING"
