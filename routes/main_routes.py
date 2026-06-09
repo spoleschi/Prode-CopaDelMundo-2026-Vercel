@@ -210,6 +210,10 @@ def ranking():
         selected_group_id=group_id,
     )
 
+@main_bp.route("/reglamento")
+@login_required
+def reglamento():
+    return render_template("reglamento.html")
 
 @main_bp.route("/partidos/<int:match_id>/pronosticos")
 @login_required

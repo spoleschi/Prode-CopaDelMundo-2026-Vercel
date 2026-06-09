@@ -223,6 +223,15 @@ body {
     font-size: 0.92rem;
 }
 
+/* Reglamento */
+
+.card-header {
+    font-weight: 600;
+}
+
+.reglamento-list li {
+    margin-bottom: 0.35rem;
+}
 
 /* Ver pronósticos jugadores */
 
