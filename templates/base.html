@@ -2,19 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Prode Mundial</title>
+    <title>Prode Copa del Mundo 2026</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        (() => {
+            const storedTheme = localStorage.getItem("prode-theme");
+            const preferredTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            const theme = storedTheme || preferredTheme;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
 
-    <!-- Bootstrap CDN para arrancar rápido -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 app-navbar">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ url_for('main.fixture') }}">
-            Prode Mundial
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span>Prode Copa del Mundo 2026</span>
         </a>
 
         <button
@@ -24,28 +33,30 @@
             data-bs-target="#mainNavbar"
             aria-controls="mainNavbar"
             aria-expanded="false"
-            aria-label="Alternar navegación"
+            aria-label="Alternar navegacion"
         >
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav ms-auto align-items-lg-center">
                 {% if session.get("user_id") %}
                     <a class="nav-link" href="{{ url_for('main.fixture') }}">
                         Fixture
                     </a>
 
                     <a class="nav-link" href="{{ url_for('main.mis_pronosticos') }}">
-                        Mis pronósticos
+                        Mis pronosticos
                     </a>
 
                     <a class="nav-link" href="{{ url_for('main.ranking') }}">
                         Ranking
                     </a>
+
                     <a class="nav-link" href="{{ url_for('group.index') }}">
                         Grupos
                     </a>
+
                     <a class="nav-link" href="{{ url_for('main.reglamento') }}">
                         Reglamento
                     </a>
@@ -58,9 +69,19 @@
 
                     <hr class="dropdown-divider d-lg-none text-secondary">
 
-                    <span class="navbar-text text-secondary me-lg-3 d-none d-lg-inline">
+                    <span class="navbar-text me-lg-3 d-none d-lg-inline">
                         {{ session.get("display_name") or session.get("email") }}
                     </span>
+
+                    <button
+                        id="themeToggle"
+                        class="theme-toggle"
+                        type="button"
+                        aria-label="Cambiar tema"
+                        title="Cambiar tema"
+                    >
+                        <span class="theme-toggle-icon" aria-hidden="true"></span>
+                    </button>
 
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">
                         Salir
@@ -73,13 +94,23 @@
                     <a class="nav-link" href="{{ url_for('auth.register') }}">
                         Registrarse
                     </a>
+
+                    <button
+                        id="themeToggle"
+                        class="theme-toggle"
+                        type="button"
+                        aria-label="Cambiar tema"
+                        title="Cambiar tema"
+                    >
+                        <span class="theme-toggle-icon" aria-hidden="true"></span>
+                    </button>
                 {% endif %}
             </div>
         </div>
     </div>
 </nav>
 
-<div class="container">
+<main class="container app-shell">
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -93,7 +124,7 @@
 
     {% block content %}{% endblock %}
 
-</div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -147,6 +178,29 @@
         });
     }
 
+    function setupThemeToggle() {
+        const button = document.getElementById("themeToggle");
+        if (!button) {
+            return;
+        }
+
+        const setTheme = theme => {
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+            localStorage.setItem("prode-theme", theme);
+            button.dataset.theme = theme;
+            button.setAttribute("aria-label", theme === "dark" ? "Activar modo claro" : "Activar modo oscuro");
+            button.setAttribute("title", theme === "dark" ? "Activar modo claro" : "Activar modo oscuro");
+        };
+
+        setTheme(document.documentElement.dataset.theme || "dark");
+
+        button.addEventListener("click", () => {
+            const currentTheme = document.documentElement.dataset.theme || "dark";
+            setTheme(currentTheme === "dark" ? "light" : "dark");
+        });
+    }
+
     function updateResponsiveInputsState() {
         const isMobile = window.matchMedia("(max-width: 767.98px)").matches;
 
@@ -160,6 +214,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+        setupThemeToggle();
         setupPasswordToggles();
         updateResponsiveInputsState();
     });
