@@ -39,6 +39,42 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.075);
 }
 
+.password-toggle-wrapper {
+    position: relative;
+}
+
+.password-toggle-input {
+    padding-right: 44px;
+}
+
+.password-toggle-button {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 4px;
+    color: #6c757d;
+    background: transparent;
+    padding: 0;
+}
+
+.password-toggle-button:hover,
+.password-toggle-button:focus {
+    color: #212529;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.password-toggle-button:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
 /* DESKTOP version */
 
 .desktop-match-score-row {
