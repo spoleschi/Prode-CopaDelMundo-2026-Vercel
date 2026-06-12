@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 try:
     from dotenv import load_dotenv
@@ -11,6 +12,7 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "dev-secret-key")
+    PERMANENT_SESSION_LIFETIME = timedelta(days=int(os.getenv("SESSION_LIFETIME_DAYS", "7")))
 
     SUPABASE_URL = os.getenv("SUPABASE_URL")
     SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")

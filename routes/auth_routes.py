@@ -33,6 +33,7 @@ def login():
 
             profile = ensure_profile(user_id=user.id, email=user.email)
 
+            session.permanent = True
             session["user_id"] = user.id
             session["email"] = user.email
             session["display_name"] = profile.get("display_name") if profile else user.email
