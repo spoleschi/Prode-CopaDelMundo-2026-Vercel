@@ -39,11 +39,12 @@ def fixture():
     predictions_by_match = {p["match_id"]: p for p in predictions}
 
     state_filter = request.args.get("state", "partidos").lower()
-    allowed_states = {"partidos", "cargados", "pendientes", "cerrados", "finalizados"}
+    allowed_states = {"partidos", "cargados", "pendientes", "cerrados", "finalizados", "hoy"}
     if state_filter not in allowed_states:
         state_filter = "partidos"
 
     now_utc = datetime.now(timezone.utc)
+    today_arg = now_utc.astimezone(ARG_TZ).date()
     grouped_matches = OrderedDict()
     summary = {
         "total_matches": 0,
@@ -51,6 +52,7 @@ def fixture():
         "pending_predictions": 0,
         "closed_matches": 0,
         "finished_matches": 0,
+        "today_matches": 0,
     }
 
     for match in matches:
@@ -61,6 +63,9 @@ def fixture():
         match["has_started"] = (
             bool(match_dt) and now_utc >= match_dt.astimezone(timezone.utc)
         )
+        match["is_today"] = bool(match_dt and match_dt.astimezone(ARG_TZ).date() == today_arg)
+        if match["is_today"]:
+            summary["today_matches"] += 1
 
         pred = predictions_by_match.get(match["id"])
         has_prediction = pred is not None
@@ -99,7 +104,9 @@ def fixture():
                 match["prediction_status_badge"] = "bg-warning text-dark"
                 match["filter_states"].append("pendientes")
 
-        if state_filter == "partidos" or state_filter in match["filter_states"]:
+        if state_filter == "partidos" or state_filter in match["filter_states"] or (
+            state_filter == "hoy" and match["is_today"]
+        ):
             grouped_matches.setdefault(day_label, []).append(match)
 
     return render_template(

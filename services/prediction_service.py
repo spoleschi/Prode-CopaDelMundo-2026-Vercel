@@ -95,11 +95,14 @@ def get_prediction_detail_by_user(user_id: str):
         """
         )
         .eq("user_id", user_id)
-        .order("match_id")
         .execute()
     )
 
-    return response.data or []
+    data = response.data or []
+    return sorted(
+        data,
+        key=lambda item: (item.get("match") or {}).get("match_date") or "",
+    )
 
 
 def get_predictions_by_match(match_id: int, user_ids: list[str] | None = None):

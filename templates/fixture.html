@@ -22,6 +22,15 @@
     </div>
 
     <div class="col-6 col-md">
+        <a href="{{ url_for('main.fixture', state='hoy') }}" class="card shadow-sm text-center text-decoration-none h-100{% if selected_state == 'hoy' %} border-primary bg-primary text-white{% endif %}" {% if selected_state == 'hoy' %}style="--bs-bg-opacity: 0.1;"{% endif %}>
+            <div class="card-body">
+                <div class="text-muted small{% if selected_state == 'hoy' %} text-white-50{% endif %}">Hoy</div>
+                <div class="fs-4 fw-bold text-info{% if selected_state == 'hoy' %} text-white{% endif %}">{{ summary.today_matches }}</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-6 col-md">
         <a href="{{ url_for('main.fixture', state='cargados') }}" class="card shadow-sm text-center text-decoration-none h-100{% if selected_state == 'cargados' %} border-primary bg-primary text-white{% endif %}" {% if selected_state == 'cargados' %}style="--bs-bg-opacity: 0.1;"{% endif %}>
             <div class="card-body">
                 <div class="text-muted small{% if selected_state == 'cargados' %} text-white-50{% endif %}">Cargados</div>
