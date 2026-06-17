@@ -38,6 +38,11 @@ def fixture():
     predictions = get_predictions_by_user(session["user_id"])
     predictions_by_match = {p["match_id"]: p for p in predictions}
 
+    state_filter = request.args.get("state", "partidos").lower()
+    allowed_states = {"partidos", "cargados", "pendientes", "cerrados", "finalizados"}
+    if state_filter not in allowed_states:
+        state_filter = "partidos"
+
     now_utc = datetime.now(timezone.utc)
     grouped_matches = OrderedDict()
     summary = {
@@ -60,18 +65,22 @@ def fixture():
         pred = predictions_by_match.get(match["id"])
         has_prediction = pred is not None
         match["has_prediction"] = has_prediction
+        match["filter_states"] = []
 
         if match.get("is_finished"):
             summary["finished_matches"] += 1
             match["prediction_status"] = "FINISHED"
             match["prediction_status_text"] = "Finalizado"
             match["prediction_status_badge"] = "bg-primary"
+            match["filter_states"].append("finalizados")
         elif not match["can_predict"]:
             summary["closed_matches"] += 1
+            match["filter_states"].append("cerrados")
             if has_prediction:
                 match["prediction_status"] = "LOADED_CLOSED"
                 match["prediction_status_text"] = "Cargado / cerrado"
                 match["prediction_status_badge"] = "bg-secondary"
+                match["filter_states"].append("cargados")
             else:
                 match["prediction_status"] = "MISSING_CLOSED"
                 match["prediction_status_text"] = "Sin cargar / cerrado"
@@ -82,19 +91,23 @@ def fixture():
                 match["prediction_status"] = "LOADED"
                 match["prediction_status_text"] = "Cargado"
                 match["prediction_status_badge"] = "bg-success"
+                match["filter_states"].append("cargados")
             else:
                 summary["pending_predictions"] += 1
                 match["prediction_status"] = "PENDING"
                 match["prediction_status_text"] = "Pendiente"
                 match["prediction_status_badge"] = "bg-warning text-dark"
+                match["filter_states"].append("pendientes")
 
-        grouped_matches.setdefault(day_label, []).append(match)
+        if state_filter == "partidos" or state_filter in match["filter_states"]:
+            grouped_matches.setdefault(day_label, []).append(match)
 
     return render_template(
         "fixture.html",
         grouped_matches=grouped_matches,
         predictions_by_match=predictions_by_match,
         summary=summary,
+        selected_state=state_filter,
     )
 
 
@@ -225,7 +238,7 @@ def pronosticos_partido(match_id):
         return redirect(url_for("main.fixture"))
 
     if not can_publish_predictions(match):
-        flash("Los pronosticos de este partido estaran disponibles cuando el partido haya comenzado.", "warning")
+        flash("Los pronósticos de este partido estaran disponibles cuando el partido haya comenzado.", "warning")
         return redirect(url_for("main.fixture"))
 
     match_dt = parse_supabase_datetime(match.get("match_date"))

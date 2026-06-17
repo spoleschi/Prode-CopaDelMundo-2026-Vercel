@@ -37,12 +37,17 @@ def guardar():
 @prediction_bp.route("/guardar-dia", methods=["POST"])
 @login_required
 def guardar_dia():
+    state = request.form.get("state")
+
+    def redirect_to_fixture():
+        return redirect(url_for("main.fixture", state=state)) if state else redirect(url_for("main.fixture"))
+
     try:
         match_ids_raw = request.form.get("match_ids", "")
 
         if not match_ids_raw:
             flash("No se recibieron partidos para guardar.", "warning")
-            return redirect(url_for("main.fixture"))
+            return redirect_to_fixture()
 
         match_ids = [int(x) for x in match_ids_raw.split(",") if x.strip()]
 
@@ -70,14 +75,14 @@ def guardar_dia():
 
         if incomplete_matches:
             flash(
-                f"Hay pronosticos incompletos en {len(incomplete_matches)} partido(s). Carga ambos goles o deja ambos campos vacios.",
+                f"Hay pronósticos incompletos en {len(incomplete_matches)} partido(s). Carga ambos goles o deja ambos campos vacios.",
                 "warning",
             )
-            return redirect(url_for("main.fixture"))
+            return redirect_to_fixture()
 
         if not predictions_to_save:
-            flash("No habia pronosticos nuevos para guardar en este dia.", "info")
-            return redirect(url_for("main.fixture"))
+            flash("No habia pronósticos nuevos para guardar en este dia.", "info")
+            return redirect_to_fixture()
 
         result = save_predictions_batch(
             user_id=session["user_id"],
@@ -88,19 +93,19 @@ def guardar_dia():
         errors = result["errors"]
 
         if saved_count > 0 and not errors:
-            flash(f"Se guardaron {saved_count} pronostico(s) correctamente.", "success")
+            flash(f"Se guardaron {saved_count} pronóstico(s) correctamente.", "success")
         elif saved_count > 0 and errors:
             flash(
-                f"Se guardaron {saved_count} pronostico(s), pero {len(errors)} no pudieron guardarse porque el partido ya cerro o tuvo un error.",
+                f"Se guardaron {saved_count} pronóstico(s), pero {len(errors)} no pudieron guardarse porque el partido ya cerro o tuvo un error.",
                 "warning",
             )
         else:
-            flash("No se pudo guardar ningun pronostico.", "danger")
+            flash("No se pudo guardar ningun pronóstico.", "danger")
 
     except ValueError as e:
         flash(str(e), "danger")
 
     except Exception:
-        flash("No se pudieron guardar los pronosticos del dia.", "danger")
+        flash("No se pudieron guardar los pronósticos del dia.", "danger")
 
-    return redirect(url_for("main.fixture"))
+    return redirect_to_fixture()
