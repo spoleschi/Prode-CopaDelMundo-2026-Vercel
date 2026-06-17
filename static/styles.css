@@ -186,6 +186,7 @@ html[data-theme="dark"] a {
 .navbar .nav-link,
 .navbar .navbar-text {
     color: rgba(255, 255, 255, 0.76) !important;
+    padding: 12px;
 }
 
 .navbar .nav-link:hover,
