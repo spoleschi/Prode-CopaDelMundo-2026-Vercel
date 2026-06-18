@@ -1,17 +1,6 @@
-import os
 from flask import Flask
 
-# Si corre en Vercel, el directorio base cambia. 
-# En local nos aseguramos de que apunte siempre a donde está index.py
-dir_actual = os.path.dirname(os.path.abspath(__file__))
-
-app = Flask(
-    __name__,
-    template_folder=os.path.join(dir_actual, 'templates'),
-    static_folder=os.path.join(dir_actual, 'static')
-)
-
-from config import Config
+from api.config import Config
 from routes.auth_routes import auth_bp
 from routes.main_routes import main_bp
 from routes.admin_routes import admin_bp
@@ -36,5 +25,3 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
-    
