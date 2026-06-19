@@ -1,13 +1,13 @@
 import unittest
 from datetime import datetime, timedelta, timezone
 
-from services.policy_service import (
+from api.services.policy_service import (
     can_access_group,
     can_admin_update_result,
     can_predict,
     validate_score,
 )
-from services.scoring_service import calculate_points, sort_ranking_rows
+from api.services.scoring_service import calculate_points, sort_ranking_rows
 from utils import parse_supabase_datetime
 
 
