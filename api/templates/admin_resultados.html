@@ -2,13 +2,22 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <div>
         <h1 class="mb-1">Carga de resultados</h1>
         <p class="text-muted mb-0">
             Panel administrador. Los horarios se muestran en hora Argentina.
         </p>
     </div>
+    <form
+        method="post"
+        action="{{ url_for('admin.sincronizar_resultados') }}"
+        onsubmit="return confirm('¿Querés sincronizar resultados desde football-data? Se actualizarán los partidos finalizados y se recalcularán los puntajes.');"
+    >
+        <button class="btn btn-primary">
+            Sincronizar desde API
+        </button>
+    </form>
 </div>
 
 {% if grouped_matches %}

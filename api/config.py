@@ -24,3 +24,4 @@ class Config:
         "yes",
         "on",
     }
+    FOOTBALL_DATA_TOKEN = os.getenv("FOOTBALL_DATA_TOKEN")

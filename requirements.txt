@@ -4,3 +4,4 @@ supabase
 gunicorn
 tzdata
 Werkzeug
+requests

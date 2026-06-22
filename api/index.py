@@ -7,7 +7,7 @@ dir_actual = os.path.dirname(os.path.abspath(__file__))
 if dir_actual not in sys.path:
     sys.path.insert(0, dir_actual)
 
-# 2. Creamos la app UNA SOLA VEZ con las rutas de plantillas correctas
+# 2. Creamos la app con las rutas de plantillas correctas
 app = Flask(
     __name__,
     template_folder=os.path.join(dir_actual, 'templates'),
