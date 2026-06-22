@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 app-navbar">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top app-navbar">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ url_for('main.fixture') }}">
             <span class="brand-mark" aria-hidden="true"></span>
@@ -27,7 +27,7 @@
         </a>
 
         <button
-            class="navbar-toggler"
+            class="navbar-toggler mt-1"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#mainNavbar"
@@ -213,12 +213,26 @@
         });
     }
 
+    function updateBodyOffset() {
+        const nav = document.querySelector("nav.navbar.fixed-top");
+        if (!nav) {
+            return;
+        }
+
+        const offset = Math.ceil(nav.getBoundingClientRect().height + 12);
+        document.documentElement.style.setProperty("--body-offset", `${offset}px`);
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         setupThemeToggle();
         setupPasswordToggles();
         updateResponsiveInputsState();
+        updateBodyOffset();
     });
-    window.addEventListener("resize", updateResponsiveInputsState);
+    window.addEventListener("resize", () => {
+        updateResponsiveInputsState();
+        updateBodyOffset();
+    });
 </script>
 
 </body>

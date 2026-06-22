@@ -55,6 +55,7 @@ html {
 
 body {
     position: relative;
+    padding-top: var(--body-offset, 110px);
     min-height: 100vh;
     color: var(--page-text);
     background:
