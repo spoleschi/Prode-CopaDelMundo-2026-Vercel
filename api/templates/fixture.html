@@ -117,12 +117,12 @@
                                         {% if match.home_team.url_flag %}
                                             <img
                                                 src="{{ match.home_team.url_flag }}"
-                                                alt="{{ match.home_team.name }}"
+                                                alt="{{ match.home_team.name if match.home_team else match.home_placeholder }}"
                                                 class="team-flag"
                                                 loading="lazy"
                                             >
                                         {% endif %}
-                                        <strong>{{ match.home_team.name }}</strong>
+                                        <strong>{{ match.home_team.name if match.home_team else match.home_placeholder }}</strong>
                                     </div>
 
                                     <div class="desktop-score-box-centered">
@@ -153,12 +153,12 @@
                                         {% if match.away_team.url_flag %}
                                             <img
                                                 src="{{ match.away_team.url_flag }}"
-                                                alt="{{ match.away_team.name }}"
+                                                alt="{{ match.away_team.name if match.away_team else match.away_placeholder }}"
                                                 class="team-flag"
                                                 loading="lazy"
                                             >
                                         {% endif %}
-                                        <strong>{{ match.away_team.name }}</strong>
+                                        <strong>{{ match.away_team.name if match.away_team else match.away_placeholder }}</strong>
                                     </div>
 
                                 </div>
@@ -223,7 +223,7 @@
                             {% if match.home_team.url_flag %}
                                 <img
                                     src="{{ match.home_team.url_flag }}"
-                                    alt="{{ match.home_team.name }}"
+                                    alt="{{ match.home_team.name if match.home_team else match.home_placeholder }}"
                                     class="mobile-flag"
                                     loading="lazy"
                                 >
@@ -260,7 +260,7 @@
                             {% if match.away_team.url_flag %}
                                 <img
                                     src="{{ match.away_team.url_flag }}"
-                                    alt="{{ match.away_team.name }}"
+                                    alt="{{ match.away_team.name if match.away_team else match.away_placeholder }}"
                                     class="mobile-flag"
                                     loading="lazy"
                                 >

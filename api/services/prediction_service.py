@@ -26,6 +26,9 @@ def save_prediction(user_id: str, match_id: int, home_score: int, away_score: in
     allowed, reason = can_predict(match)
     if not allowed:
         raise ValueError(reason)
+    
+    if not match.get("home_team_id") or not match.get("away_team_id"):
+        raise ValueError("Todavía no están definidos los equipos de este partido.")
 
     data = {
         "user_id": user_id,

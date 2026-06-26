@@ -22,6 +22,14 @@ from services.result_sync_service import (
     apply_result_sync,
 )
 
+from services.knockout_sync_service import (
+    preview_knockout_team_sync,
+    apply_knockout_team_sync,
+)
+
+
+
+
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
@@ -335,5 +343,104 @@ def sincronizar_resultados():
         print(repr(e))
 
         flash("No se pudo sincronizar resultados desde football-data.", "danger")
+
+    return redirect(url_for("admin.resultados"))
+
+@admin_bp.route("/api-test/football-data/knockout-teams/preview")
+@admin_required
+def football_data_knockout_teams_preview():
+    try:
+        data = preview_knockout_team_sync()
+        return jsonify(data)
+
+    except Exception as e:
+        print("ERROR FOOTBALL DATA KNOCKOUT TEAMS PREVIEW:")
+        print(type(e))
+        print(repr(e))
+
+        return jsonify({
+            "ok": False,
+            "error": "Error generando preview de cruces eliminatorios.",
+            "detail": str(e)
+        }), 500
+
+
+@admin_bp.route("/api-test/football-data/knockout-teams/apply", methods=["GET", "POST"])
+# @admin_bp.route("/api-test/football-data/knockout-teams/apply", methods=["POST"])
+@admin_required
+def football_data_knockout_teams_apply():
+    try:
+        data = apply_knockout_team_sync()
+        return jsonify(data)
+
+    except Exception as e:
+        print("ERROR FOOTBALL DATA KNOCKOUT TEAMS APPLY:")
+        print(type(e))
+        print(repr(e))
+
+        return jsonify({
+            "ok": False,
+            "error": "Error aplicando sincronización de cruces eliminatorios.",
+            "detail": str(e)
+        }), 500
+        
+@admin_bp.route("/resultados/sincronizar-cruces", methods=["POST"])
+@admin_required
+def sincronizar_cruces():
+    try:
+        result = apply_knockout_team_sync()
+
+        updated_count = result.get("updated_count", 0)
+        error_count = result.get("error_count", 0)
+
+        preview = result.get("preview", {})
+
+        already_ok_count = preview.get("already_ok_count", 0)
+        not_defined_yet_count = preview.get("not_defined_yet_count", 0)
+        missing_external_count = preview.get("missing_external_count", 0)
+        team_not_found_count = preview.get("team_not_found_count", 0)
+
+        if updated_count > 0:
+            flash(
+                f"Cruces sincronizados correctamente. "
+                f"Partidos actualizados: {updated_count}. "
+                f"Ya estaban correctos: {already_ok_count}. "
+                f"Todavía sin definir: {not_defined_yet_count}.",
+                "success"
+            )
+        else:
+            flash(
+                f"Sincronización de cruces completada sin nuevos cambios. "
+                f"Ya estaban correctos: {already_ok_count}. "
+                f"Todavía sin definir: {not_defined_yet_count}.",
+                "info"
+            )
+
+        if missing_external_count > 0:
+            flash(
+                f"Atención: {missing_external_count} partido(s) eliminatorios "
+                f"no se encontraron en football-data.",
+                "warning"
+            )
+
+        if team_not_found_count > 0:
+            flash(
+                f"Atención: {team_not_found_count} partido(s) tienen equipos "
+                f"cuyo código no existe en tu tabla teams. Revisá TEAM_CODE_ALIASES.",
+                "warning"
+            )
+
+        if error_count > 0:
+            flash(
+                f"La sincronización tuvo {error_count} error(es). Revisá los logs.",
+                "danger"
+            )
+
+    except Exception as e:
+        print("ERROR SINCRONIZAR CRUCES:")
+        print(type(e))
+        print(repr(e))
+
+        flash("No se pudieron sincronizar los cruces desde football-data.", "danger")
 
     return redirect(url_for("admin.resultados"))

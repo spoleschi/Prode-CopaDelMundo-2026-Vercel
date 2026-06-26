@@ -1,29 +1,54 @@
 from services.policy_service import can_admin_update_result, validate_score
 from services.supabase_service import get_supabase_admin_client
 
+# def get_matches():
+#     supabase = get_supabase_admin_client()
+
+#     response = (
+#         supabase.table("matches")
+#         .select(
+#             """
+#             id,
+#             match_date,
+#             stage,
+#             home_score,
+#             away_score,
+#             is_finished,
+#             home_team:home_team_id(id, name, code, url_flag),
+#             away_team:away_team_id(id, name, code, url_flag)
+#         """
+#         )
+#         .order("match_date")
+#         .execute()
+#     )
+
+#     return response.data or []
+
 def get_matches():
     supabase = get_supabase_admin_client()
 
     response = (
         supabase.table("matches")
-        .select(
-            """
+        .select("""
             id,
             match_date,
             stage,
             home_score,
             away_score,
             is_finished,
+            home_placeholder,
+            away_placeholder,
+            fifa_match_no,
+            knockout_order,
+            venue,
             home_team:home_team_id(id, name, code, url_flag),
             away_team:away_team_id(id, name, code, url_flag)
-        """
-        )
+        """)    
         .order("match_date")
         .execute()
     )
 
     return response.data or []
-
 
 def get_match(match_id: int):
     supabase = get_supabase_admin_client()
