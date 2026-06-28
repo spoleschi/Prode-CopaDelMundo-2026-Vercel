@@ -162,26 +162,28 @@ def get_ranking(group_id: int | None = None):
             "computed_predictions": 0
         }
 
-    predictions_response = (
-        supabase
-        .table("predictions")
-        .select("""
-            id,
-            user_id,
-            home_score,
-            away_score,
-            points,
-            match:match_id(
-                id,
-                home_score,
-                away_score,
-                is_finished
-            )
-        """)
-        .execute()
-    )
+    # predictions_response = (
+    #     supabase
+    #     .table("predictions")
+    #     .select("""
+    #         id,
+    #         user_id,
+    #         home_score,
+    #         away_score,
+    #         points,
+    #         match:match_id(
+    #             id,
+    #             home_score,
+    #             away_score,
+    #             is_finished
+    #         )
+    #     """)
+    #     .execute()
+    # )
 
-    predictions = predictions_response.data or []
+    # predictions = predictions_response.data or []
+    
+    predictions = fetch_all_predictions_for_ranking()
 
     for prediction in predictions:
         user_id = prediction["user_id"]
@@ -244,3 +246,47 @@ def reset_points_for_match(match_id: int):
     )
 
     return response.data
+
+# Solución para el problema del ranking
+
+def fetch_all_predictions_for_ranking(page_size: int = 1000):
+    
+    from services.supabase_service import get_supabase_admin_client
+    supabase = get_supabase_admin_client()
+
+    all_rows = []
+    start = 0
+
+    while True:
+        end = start + page_size - 1
+
+        response = (
+            supabase
+            .table("predictions")
+            .select("""
+                id,
+                user_id,
+                home_score,
+                away_score,
+                points,
+                match:match_id(
+                    id,
+                    home_score,
+                    away_score,
+                    is_finished
+                )
+            """)
+            .order("id")
+            .range(start, end)
+            .execute()
+        )
+
+        rows = response.data or []
+        all_rows.extend(rows)
+
+        if len(rows) < page_size:
+            break
+
+        start += page_size
+
+    return all_rows
