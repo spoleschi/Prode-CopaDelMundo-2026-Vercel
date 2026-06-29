@@ -219,7 +219,7 @@
                     
                     <div class="mobile-match-main">
                         <div class="mobile-team mobile-team-left">
-                            <span class="mobile-team-code">{{ match.home_team.code }}</span>
+                            <span class="mobile-team-code">{{ match.home_team.code if match.home_team else match.home_placeholder }}</span>
                             {% if match.home_team.url_flag %}
                                 <img
                                     src="{{ match.home_team.url_flag }}"
@@ -265,7 +265,7 @@
                                     loading="lazy"
                                 >
                             {% endif %}
-                            <span class="mobile-team-code">{{ match.away_team.code }}</span>
+                            <span class="mobile-team-code">{{ match.away_team.code if match.away_team else match.away_placeholder }}</span>
                         </div>
                     </div>
 
